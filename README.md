@@ -62,6 +62,8 @@
 
 #### IOS
 
+###### undefined symbol: _swift_stdlib_isstackallocationsafe
+
 ###### [GDTCORPlatform.m:87:43 A function declaration without a prototype is deprecated in all versions of C](#3.2)   
 
 ###### [Type 'ChartDataSet' does not conform to protocol 'RangeReplaceableCollection'](#3.3)      
