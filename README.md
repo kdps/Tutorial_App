@@ -1,3 +1,16 @@
+# Run android studio using terminal
+
+General Android Studio
+
+```bash
+open -a /Applications/Android\ Studio.app
+```
+
+Android Studio Preview
+
+```bash
+open -a /Applications/Android\ Studio\ Preview.app
+```
 
 # [React-Native](#reactnative)
 # [Android Java](#androidjava)
