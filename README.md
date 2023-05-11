@@ -24,6 +24,31 @@ https://docs.huihoo.com/apple/wwdc/2012/session_405__modern_objectivec.pdf
 
 # Code Example
 
+###### [GPS](#objectivec_gps)
+###### [Syncronize](#objectivec_syncronize)
+###### [UserNotifications](#objectivec_usernotifications)
+###### [TTS](#objectivec_tts)
+###### [File](#objectivec_file)
+###### [TryCatchFinally](#objectivec_trycatchfinally)
+###### [Variables](#objectivec_variables)
+###### [Timer](#objectivec_timer)
+###### [Random](#objectivec_random)
+###### [Pointer](#objectivec_pointer)
+###### [Operator](#objectivec_operator)
+###### [NSURLRequest](#objectivec_nsurlrequest)
+###### [NSString](#objectivec_nsstring)
+###### [NSMutableArray](#objectivec_nsmutablearray)
+###### [NSDictionary](#objectivec_nsdictionary)
+###### [NSArray](#objectivec_nsarray)
+###### [Integer](#objectivec_integer)
+###### [Instance](#objectivec_instance)
+###### [Function](#objectivec_function)
+###### [Device](#objectivec_device)
+###### [DateTime](#objectivec_datetime)
+###### [Constructor](#objectivec_constructor)
+###### [Clipboard](#objectivec_clipboard)
+###### [Bundle](#objectivec_bundle)
+###### [Block](#objectivec_block)
 
 &nbsp;
 &nbsp;
@@ -139,7 +164,7 @@ dispatch_group_notify(preapreWaitingGroup, dispatch_get_main_queue(), ^{
 &nbsp;
 
 
-## UserNotifications
+## UserNotifications <a id='objectivec_usernotifications'></a>
 
 ### 1. How to use
 
@@ -200,7 +225,7 @@ if( [UIApplication sharedApplication].applicationState != UIApplicationStateActi
 &nbsp;
 
 
-## TTS
+## TTS <a id='objectivec_tts'></a>
 
 ### 1. Speak
 
@@ -231,7 +256,7 @@ AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:@"So
 &nbsp;
 
 
-## File
+## File <a id='objectivec_file'></a>
 
 ### 1. Write file to specify path
 
@@ -255,7 +280,7 @@ __autoreleasing NSError *error;
     NSString *readContents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
 ```
 
-## TryCatchFinally
+## TryCatchFinally <a id='objectivec_trycatchfinally'></a>
 
 ```ObjectiveC
 NSString *test = @"test";
@@ -281,7 +306,7 @@ NSString *test = @"test";
 &nbsp;
 
 
-## Variables
+## Variables <a id='objectivec_variables'></a>
 
 ### 1. Get selfs
 
@@ -303,7 +328,7 @@ NSString *test = @"test";
 &nbsp;
 
 
-## Timer
+## Timer <a id='objectivec_timer'></a>
 
 ### 1. Interval
 
@@ -345,7 +370,7 @@ NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: Selector(sel
 &nbsp;
 
 
-## Random
+## Random <a id='objectivec_random'></a>
 
 ### 1. Get random number
 
@@ -364,7 +389,7 @@ uint32_t randomIntegerWithinRange = arc4random_uniform(10) + 3;
 &nbsp;
 
 
-## Pointer
+## Pointer <a id='objectivec_pointer'></a>
 
 ### 1. Swap memory address
 
@@ -383,7 +408,7 @@ NSLog(@"After calling swap: a=%d,b=%d",a,b);
 &nbsp;
 
 
-## Operator
+## Operator <a id='objectivec_operator'></a>
 
 ### 1. []
 
@@ -442,7 +467,7 @@ Type hint -> Variables
 &nbsp;
 
 
-## NSURLRequest
+## NSURLRequest <a id='objectivec_nsurlrequest'></a>
 
 ### 1. Async
 
@@ -461,7 +486,7 @@ NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegat
 &nbsp;
 
 
-## NSString
+## NSString <a id='objectivec_nsstring'></a>
 
 ### 1. String Format
 
@@ -569,7 +594,7 @@ NSString *string = [[NSString alloc] initWithData:utf8Data
 &nbsp;
 
 
-## NSMutableArray
+## NSMutableArray <a id='objectivec_nsmutablearray'></a>
 
 ### 1. Remove items in range
 
@@ -584,7 +609,7 @@ NSString *string = [[NSString alloc] initWithData:utf8Data
 &nbsp;
 
 
-## NSDictionary
+## NSDictionary <a id='objectivec_nsdictionary'></a>
 
 ### 1. Initialize
 
@@ -642,7 +667,7 @@ Car * lamborghini = cars[@"Lamborghini"];
 &nbsp;
 
 
-## NSArray
+## NSArray <a id='objectivec_nsarray'></a>
 
 ### 1. Initialize
 
@@ -668,7 +693,7 @@ NSString *sentence = [yourWords componentsJoinedByString:@" "];
 &nbsp;
 
 
-## Integer
+## Integer <a id='objectivec_integer'></a>
 
 ### 1. Format
 
@@ -686,7 +711,7 @@ NSString * price = [NSString stringWithFormat:@"%@", [numFormatter stringFromNum
 &nbsp;
 
 
-## Instance
+## Instance <a id='objectivec_instance'></a>
 
 ### 1. No parameter
 
@@ -719,7 +744,7 @@ MyObject *foo = [[MyObject alloc] initWithString:myString];
 &nbsp;
 
 
-## Function
+## Function <a id='objectivec_function'></a>
 
 ### 1. Open settings
 
@@ -779,7 +804,7 @@ if ([[UIApplication sharedApplication] canOpenURL:url]) {
 &nbsp;
 
 
-## Device
+## Device <a id='objectivec_device'></a>
 
 ### 1. Get version
 
@@ -833,7 +858,7 @@ NSString *UDIDString = [[[UIDevice currentDevice] identifierForVendor] UUIDStrin
 &nbsp;
 
 
-## DateTime
+## DateTime <a id='objectivec_datetime'></a>
 
 ### 1. Get 90 days ago date
 
@@ -890,7 +915,7 @@ NSString *stringFromDate = [formatter stringFromDate:clsDate];
 &nbsp;
 
 
-## Constructor
+## Constructor <a id='objectivec_constructor'></a>
 
 ### 1. Basic
 
@@ -924,7 +949,7 @@ int function (int i) {
 &nbsp;
 
 
-## Clipboard
+## Clipboard <a id='objectivec_clipboard'></a>
 
 ### 1. Copy
 
@@ -939,7 +964,7 @@ int function (int i) {
 &nbsp;
 
 
-## Bundle
+## Bundle <a id='objectivec_bundle'></a>
 
 ### 1. Get file list in main bundle
 
@@ -998,7 +1023,7 @@ NSString * bundlePath = [[NSBundle mainBundle] resourcePath];
 &nbsp;
 
 
-## Block
+## Block <a id='objectivec_block'></a>
 
 ### 1. Recursive Blocks
 
