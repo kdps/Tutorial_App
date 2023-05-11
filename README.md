@@ -500,7 +500,10 @@ public lazy var presentationContextProvider: Any? = DefaultPresentationContextPr
 ```swift
 public var presentationContextProvider: Any?
 
-if #available(iOS 13.0, *) { self.presentationContextProvider = DefaultPresentationContextProvider() } else { self.presentationContextProvider = nil }
+public init() {
+    if #available(iOS 13.0, *) { self.presentationContextProvider = DefaultPresentationContextProvider() } else { self.presentationContextProvider = nil }
+    ...
+}
 ```
 
 
