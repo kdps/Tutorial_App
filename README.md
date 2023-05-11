@@ -407,6 +407,22 @@ uint32_t randomIntegerWithinRange = arc4random_uniform(10) + 3;
 ### 1. Swap memory address
 
 ```objective-c
+@interface SwapClass : NSObject
+
+-(void) swap:(int)num1 andNum2:(int)num2;
+
+@end
+
+@implementation SwapClass
+
+-(void) num:(int*)num1 andNum2:(int*)num2{
+    int temp;
+    temp = *num1;
+    *num1 = *num2;
+    *num2 = temp;
+}
+@end
+
 int a = 10, b =20;
 SwapClass *swap = [[SwapClass alloc]init];
 NSLog(@"Before calling swap: a=%d,b=%d",a,b);
