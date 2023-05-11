@@ -1,5 +1,5 @@
 
-# React-Native(#react-native)
+# React-Native(#reactnative)
 
 
 
@@ -10,7 +10,7 @@
 
 
 
-# React-Native Bookmark <a id='react-native'></a>
+# React-Native Bookmark <a id='reactnative'></a>
 
 ## Tutorial
 
