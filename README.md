@@ -1,7 +1,1058 @@
 
 # [React-Native](#reactnative)
 # [Android Java](#androidjava)
+# [Objective-C](#objectivec)
 # [Swift](#swift)
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+# Objective-C Bookmark <a id='objectivec'></a>
+
+Modern Objective-C
+
+https://docs.huihoo.com/apple/wwdc/2012/session_405__modern_objectivec.pdf
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+# Code Example
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## GPS <a id='objectivec_gps'></a>
+
+### 1. Get permission state
+
+```objective-c
+CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+
+switch (status) {
+    case kCLAuthorizationStatusNotDetermined:
+        //The user hasn't yet chosen whether your app can use location services or not.
+
+        break;
+
+    case kCLAuthorizationStatusAuthorizedAlways:
+        //The user has let your app use location services all the time, even if the app is in the background.
+
+        break;
+
+    case kCLAuthorizationStatusAuthorizedWhenInUse:
+        //The user has let your app use location services only when the app is in the foreground.
+
+        break;
+
+    case kCLAuthorizationStatusRestricted:
+        //The user can't choose whether or not your app can use location services or not, this could be due to parental controls for example.
+        break;
+
+    case kCLAuthorizationStatusDenied:
+        //The user has chosen to not let your app use location services.
+
+        break;
+
+    default:
+        break;
+}
+```
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Asyncronize_Syncronize <a id='objectivec_syncronize'></a>
+
+## 1. Asyncronized
+
+### 1.1 Concurrent dispatch queue
+
+```objective-c
+dispatch_async(dispatch_queue_create("Foo", DISPATCH_QUEUE_CONCURRENT), ^{
+});
+```
+
+`OUT-OF-ORDER`
+
+### 1.2 Serial dispatch queue (stack queue)
+
+```objective-c
+dispatch_async(dispatch_queue_create("Foo", NULL), ^{
+});
+```
+
+`IN-OF-ORDER`
+
+### 1.3 Execute from main thread
+
+```objective-c
+dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    //Perform expensive tasks
+    //...
+
+    //Now before updating the UI, ensure we are back on the main thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+        label.text = //....
+    });
+}
+```
+
+## 2. Syncronized
+
+### Asleep for other thread
+
+```objective-c
+dispatch_group_t preapreWaitingGroup = dispatch_group_create();
+```
+
+```objective-c
+dispatch_group_enter(preapreWaitingGroup);
+[self doAsynchronousTaskWithComplete:^(id someResults, NSError *error) { 
+    // Notify that this task has been completed.
+    dispatch_group_leave(preapreWaitingGroup);  
+}]
+```
+
+```objective-c
+dispatch_group_notify(preapreWaitingGroup, dispatch_get_main_queue(), ^{
+    // This block will be executed once all above threads completed and call dispatch_group_leave
+    NSLog(@"Prepare completed. I'm readyyyy");
+});
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## UserNotifications
+
+### 1. How to use
+
+!!! It was shown when app is background
+
+1. Add to header
+
+```objective-c
+#import <UserNotifications/UserNotifications.h>
+```
+
+2. Registry when app is started
+
+```objective-c
+UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+ [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert)
+            completionHandler:^(BOOL granted, NSError * _Nullable error) {
+             if (!error) {
+              NSLog(@"requestAuthorizationWithOptions ok");
+             }
+            }]; 
+```
+
+3. Run UserNotifications
+
+```objective-c
+if( [UIApplication sharedApplication].applicationState != UIApplicationStateActive )
+ {
+  UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+  content.title = [NSString localizedUserNotificationStringForKey:@"TestPushKit" arguments:nil];
+  content.body = [NSString localizedUserNotificationStringForKey:@"New Call from 01012345678"
+                             arguments:nil];
+  content.sound = [UNNotificationSound defaultSound];
+  
+  // If you want change badge
+  //content.badge = @([[UIApplication sharedApplication] applicationIconBadgeNumber] + 1); 
+
+  UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"New Call"
+                                     content:content trigger:nil]; 
+
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+   if (!error) {
+    NSLog(@"addNotificationRequest ok");
+   }
+  }];
+ }
+ else
+ {
+  NSLog(@"app is active");
+ }
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## TTS
+
+### 1. Speak
+
+```objective-c
+#import <AVFoundation/AVFoundation.h>
+```
+
+`first, you should to include avfoundation header file`
+
+```objective-c
+AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc]init];
+AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:@"Some text"];
+[utterance setRate:0.2f];
+[synthesizer speakUtterance:utterance];
+```
+
+### 2. Pause, Stop Interface
+
+```objective-c
+- (BOOL)pauseSpeakingAtBoundary:(AVSpeechBoundary)boundary;
+- (BOOL)stopSpeakingAtBoundary:(AVSpeechBoundary)boundary;
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## File
+
+### 1. Write file to specify path
+
+```objective-c
+NSString *str = @"Hello World";
+NSString *dirPath = @"/Users/username/Desktop";
+NSString *filePath = [dirPath stringByAppendingPathComponent:@"helloworld.txt"];
+
+__autoreleasing NSError *error;
+BOOL ret = [str writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+```
+
+### 2. Read contents of specify file
+
+```objective-c
+NSString *str = @"Hello World";
+NSString *dirPath = @"/Users/username/Desktop";
+NSString *filePath = [dirPath stringByAppendingPathComponent:@"helloworld.txt"];
+
+__autoreleasing NSError *error;
+    NSString *readContents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+```
+
+## TryCatchFinally
+
+```ObjectiveC
+NSString *test = @"test";
+ unichar a;
+ int index = 5;
+    
+ @try {
+    a = [test characterAtIndex:index];
+ }
+ @catch (NSException *exception) {
+    NSLog(@"%@", exception.reason);
+    NSLog(@"Char at index %d cannot be found", index);
+    NSLog(@"Max index is: %lu", [test length] - 1);
+ }
+ @finally {
+    NSLog(@"Finally condition");
+ }
+```
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Variables
+
+### 1. Get selfs
+
+```objective-c
+// Static
++ (NSArray *)validSuits {
+    return @[@"♠︎", @"♣︎", @"♥︎", @"♦︎"];
+}
+
+- (void) var {
+  NSArray *suites = [[self class] validSuits];
+}
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Timer
+
+### 1. Interval
+
+```objective-c
+NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(doSomething) userInfo:nil repeats:NO];
+```
+
+### 2. Invalidate
+
+```objective-c
+[timer invalidate];
+```
+
+### 3. Fire
+
+```objective-c
+[timer fire];
+```
+
+### 4. Call method when timer interval is ended
+
+```objective-c
+NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                  target:self
+                                                selector:@selector(iGotCall:)
+                                                userInfo:@"i am iOS guy" repeats:YES];
+```
+
+### 5. Scheduler
+
+```objective-c
+NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: Selector(self.timerMethod()), userInfo: nil, repeats: false)
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Random
+
+### 1. Get random number
+
+```objective-c
+uint32_t randomInteger = arc4random_uniform(5);
+```
+
+```objective-c
+uint32_t randomIntegerWithinRange = arc4random_uniform(10) + 3;
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Pointer
+
+### 1. Swap memory address
+
+```objective-c
+int a = 10, b =20;
+SwapClass *swap = [[SwapClass alloc]init];
+NSLog(@"Before calling swap: a=%d,b=%d",a,b);
+[swap num:&a andNum2:&b];
+NSLog(@"After calling swap: a=%d,b=%d",a,b);
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Operator
+
+### 1. []
+
+Call method
+
+a->method(); => [a method];
+
+obj->method(argument); -> [obj method:argument];
+
+```objective-c
+[object method];
+[object methodWithInput:input];
+
+output = [object methodWithOutput];
+
+[NSString stringWithFormat:[prefs format]];
+```
+
+### 2. id
+
+Promotion
+
+void pointer
+
+```objective-c
+id myObject = [NSString string];
+```
+
+### 3. : 
+
+[] Arguments
+
+```objective-c
+[myData writeToFile:@"/tmp/log.txt" atomically:NO];
+```
+
+### 4. .
+
+```objective-c
+photo.caption = @"Hello World";
+```
+
+### 5. @
+
+Type hint -> Variables
+
+
+### 6.+,-
+
+\+ : Class Method, - : Instance Method
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## NSURLRequest
+
+### 1. Async
+
+```objective-c
+// Create the request instance.
+NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://google.com"]];
+ 
+// Create url connection and fire request
+NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## NSString
+
+### 1. String Format
+
+```objective-c
+NSString * format = [NSString stringWithFormat:@"%@s World", @"Hello"];
+```
+
+`String`
+
+```objective-c
+int k = 0x8f << 2;
+id format = [NSString stringWithFormat:@"%d", k];
+NSLog (fm);
+```
+
+`Integer`
+
+### 2. Equality
+
+```objective-c
+if ( [@"Hello" isEqualToString:@"Hello"] ) {
+    NSLog(@"World");
+} else {
+    NSLog(@"Hello");
+}
+```
+
+### 3. Substring
+
+```objective-c
+NSString * strStartTime = @"20150102030405";
+NSString * strYear = [strStartTime substringWithRange:NSMakeRange(0, 4)];
+```
+
+### 4. Use utf-8 string
+
+```objective-c
+[NSString stringWithUTF8String:"utf-8 string"];
+```
+
+### 5. startWith
+
+```objective-c
+if( [strTest hasPrefix:@"tel:"] )
+{
+} 
+```
+
+### 6. Contains
+
+```objective-c
+if( [strNumber containsString:@"1234"] )
+{
+}
+```
+
+### 7. upperString
+
+```objective-c
+[myString uppercaseString]
+```
+
+### 8. lowerString
+
+```objective-c
+[myString lowercaseString]
+```
+
+### 9. upperOnlyFirst
+
+```objective-c
+[myString capitalizedString]
+```
+
+### 10. Reverse
+
+```objective-c
+NSMutableString *reversedString = [NSMutableString string];
+NSInteger charIndex = [myString length];
+while (charIndex > 0) {
+    charIndex--;
+    NSRange subStrRange = NSMakeRange(charIndex, 1);
+    [reversedString appendString:[myString substringWithRange:subStrRange]];
+}
+```
+
+### 11. Decode
+
+```objective-c
+NSString *string = [[NSString alloc] initWithData:utf8Data
+                                         encoding:NSUTF8StringEncoding];
+```
+
+### 12. Encode
+
+```objective-c
+NSString *string = [[NSString alloc] initWithData:utf8Data
+                                         encoding:NSUTF8StringEncoding];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## NSMutableArray
+
+### 1. Remove items in range
+
+```objective-c
+[_clsList removeObjectsInRange:NSMakeRange(fromIndex, toIndex)];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## NSDictionary
+
+### 1. Initialize
+
+```objective-c
+NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:@"value1", @"key1", @"value2", @"key2", nil];
+```
+
+### 2. Array key, value
+
+```objective-c
+NSArray *keys = [NSArray arrayWithObjects:@"key1", @"key2", nil];
+NSArray *objects = [NSArray arrayWithObjects:@"value1", @"value2", nil];
+NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:objects 
+                                                       forKeys:keys];
+```
+
+### 3. Literal
+
+```objective-c
+NSDictionary *dict = @{@"key": @"value", @"nextKey": @"nextValue"};
+```
+
+### 4. Check has key
+
+```objective-c
+NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"name1", @"Sam",@"name2", @"Sanju",nil];
+
+if (dict[@"name1"] != nil) {
+} else {  
+}
+```
+
+### 5. With plist
+
+```objective-c
+NSString *pathToPlist = [[NSBundle mainBundle] pathForResource:@"plistName" 
+    ofType:@"plist"];
+NSDictionary *plistDict = [[NSDictionary alloc] initWithContentsOfFile:pathToPlist];
+```
+
+### 6. Get object
+
+```objective-c
+Car * lamborghini = [cars objectForKey:@"Lamborghini"];
+```
+
+```objective-c
+Car * lamborghini = cars[@"Lamborghini"];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## NSArray
+
+### 1. Initialize
+
+```objective-c
+NSArray *array = [NSArray arrayWithObject:@"1" @"2" @"3"];
+```
+
+```objective-c
+NSArray *array = @[@"1", @"2", @"3"];
+```
+
+### 2. Compare
+
+```objective-c
+NSArray *yourWords = @[@"Objective-C", @"is", @"just", @"awesome"];
+NSString *sentence = [yourWords componentsJoinedByString:@" "];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Integer
+
+### 1. Format
+
+```objective-c
+NSNumberFormatter * numFormatter = [[NSNumberFormatter alloc] init];
+[numFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+int value = 1000;
+NSString * price = [NSString stringWithFormat:@"%@", [numFormatter stringFromNumber:[NSNumber numberWithInt:value]]];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Instance
+
+### 1. No parameter
+
+```objective-c
+MyObject *foo = [[MyObject alloc] init];
+```
+
+### 2. With parameter
+
+```objective-c
+MyObject *foo = [[MyObject alloc] initWithString:myString];
+```
+
+### 3. Initialize function
+
+```objective-c
+- (id)init {
+    self = [super init];
+    if (self) {
+        // perform initialization of object here
+    }
+    return self;
+}
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Function
+
+### 1. Open settings
+
+```objective-c
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+```
+
+### 2. Open browser
+
+```objective-c
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.stackoverflow.com"]];
+```
+
+### 3. Share contents
+
+```objective-c
+NSArray* sharedObjects=[NSArray arrayWithObjects:@"sharecontent",  nil];
+UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:sharedObjects applicationActivities:nil];
+activityViewController.popoverPresentationController.sourceView = self.view;
+[self presentViewController:activityViewController animated:YES completion:nil];
+```
+
+### 4. Open email
+
+* Deprecated *
+```objective-c
+NSURL *url = [NSURL URLWithString:@"mailto://azimov@demo.com"];
+if ([[UIApplication sharedApplication] canOpenURL:url]) {
+    [[UIApplication sharedApplication] openURL:url];
+} else {
+    NSLog(@"Cannot open URL");
+}
+```
+
+```objective-c
+NSURL *url = [NSURL URLWithString:@"mailto://azimov@demo.com"];
+if ([[UIApplication sharedApplication] canOpenURL:url]) {
+    NSString * url = @"mailto://azimov@demo.com";
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL bSuccess) {
+
+    }];
+} else {
+    NSLog(@"Cannot open URL");
+}
+```
+
+### 5. Hide status bar
+
+```objective-c
+[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade]
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Device
+
+### 1. Get version
+
+```objective-c
+NSString *version = [[UIDevice currentDevice] systemVersion]
+```
+
+### 2. Compare version
+
+```objective-c
+NSString *version = @"3.1.3"; 
+NSString *currentVersion = @"3.1.1";
+NSComparisonResult result = [currentVersion compare:version options:NSNumericSearch];
+switch(result){
+  case: NSOrderedAscending:
+        //less than the current version
+  break;
+  case: NSOrderedDescending:
+  case: NSOrderedSame:
+       // equal or greater than the current version
+  break;
+}
+```
+
+### 3. Generate UUID
+
+```objective-c
++ (NSString *)randomUUID {
+    if(NSClassFromString(@"NSUUID")) { // only available in iOS >= 6.0
+        return [[NSUUID UUID] UUIDString];
+    }
+    CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
+    CFStringRef cfuuid = CFUUIDCreateString(kCFAllocatorDefault, uuidRef);
+    CFRelease(uuidRef);
+    NSString *uuid = [((__bridge NSString *) cfuuid) copy];
+    CFRelease(cfuuid);
+    return uuid;
+}
+```
+
+### 4. Get identifier of provider vendor
+
+```objective-c
+NSString *UDIDString = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## DateTime
+
+### 1. Get 90 days ago date
+
+```objective-c
+NSDate *currentDate = [NSDate date];
+    
+NSDate *currentDate = [NSDate date];
+    
+NSLog(@"Base          : %@", currentDate);
+
+NSDateComponents *comps = [[[NSDateComponents alloc] init]
+                           autorelease];
+
+[comps setDay:-90];
+
+NSCalendar *calendar;
+calendar = [[[NSCalendar alloc]
+            initWithCalendarIdentifier:NSGregorianCalendar]
+            autorelease];
+
+NSDate *date;
+date = [calendar dateByAddingComponents:comps
+                                 toDate:currentDate
+                                options:0];
+
+NSLog(@"Before 90days : %@", date);
+```
+
+### 2. Get current date
+
+```objective-c
+NSDate *date = [NSDate date];
+NSLog(@"%@", date);
+```
+
+### 3. Convert NSDate to NSString pointer
+
+```objective-c
+NSDate * clsDate = [NSDate date];
+
+NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+[formatter setDateFormat:@"yyyy-MM-dd"];
+
+//Optionally for time zone conversions
+[formatter setTimeZone:[NSTimeZone timeZoneWithName:@"..."]];
+
+NSString *stringFromDate = [formatter stringFromDate:clsDate];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Constructor
+
+### 1. Basic
+
+```C
+int function (int i) {
+  return square_root(i);
+}
+```
+
+```objective-c
+- (int)method:(int)i {
+  return [self square_root:i];
+}
+```
+
+### 2. Multiple Arguments
+
+```objective-c
+- (void)changeColorToRed:(float)red green:(float)green blue:(float)blue {
+    //... Implementation ...
+}
+
+//Called like so:
+[myColor changeColorToRed:5.0 green:2.0 blue:6.0];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Clipboard
+
+### 1. Copy
+
+```objective-c
+[[UIPasteboard generalPasteboard] setString:@"안녕하세요"];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Bundle
+
+### 1. Get file list in main bundle
+
+```objective-c
+NSString *path = [[NSBundle mainBundle] bundlePath];
+NSArray *list = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+NSLog(@"%@", list);
+```
+
+### 2. Get file list in main bundle with specify extension
+
+```objective-c
+NSString *path = [[NSBundle mainBundle] bundlePath];
+NSArray *list = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+NSArray *onlyJPG = [list filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.jpg'"]];
+NSLog(@"%@", onlyJPG);
+```
+
+### 3. Get documents file list
+
+```objective-c
+NSString *path = [NSString stringWithFormat:@"%@/Documents/", NSHomeDirectory()];
+NSArray *list = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+NSLog(@"%@", list);
+```
+
+### 4. Get file list in sub directory
+
+```objective-c
+- (NSString *)findSubDirectory {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *path = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"image"];;
+    NSArray *list = [fileManager subpathsOfDirectoryAtPath:path error:nil];
+    for (NSString *string in list) {
+        BOOL isDir = NO;
+        [fileManager fileExistsAtPath:[path stringByAppendingPathComponent:string] isDirectory:&isDir];
+        if (isDir) {
+            NSLog(@"%@", string);
+        }
+    }
+    
+    return nil;
+}
+```
+
+### 5. Get main bundle path
+
+```objective-c
+NSString * bundlePath = [[NSBundle mainBundle] resourcePath];
+```
+
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+## Block
+
+### 1. Recursive Blocks
+
+```objective-c
+- (void)alert:(NSString *)messsage title:(NSString *)titleMsg okMsg:(NSString *)okMsg cancelMsg:(NSString *)cancelMsg {
+    
+    UIAlertController * alert=   [UIAlertController
+                                  alertControllerWithTitle:titleMsg
+                                  message:@"Alert"
+                                  preferredStyle:UIAlertControllerStyleAlert];
+     
+    __block void (^okAction)(UIAlertAction *) = [^void (UIAlertAction * action)
+    {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    } copy];
+    
+    __block void (^cancelAction)(UIAlertAction *) = [^void (UIAlertAction * action)
+    {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    } copy];
+    
+    
+    UIAlertAction* ok = [UIAlertAction
+                         actionWithTitle:okMsg
+                         style:UIAlertActionStyleDefault
+                         handler:okAction];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:cancelMsg
+                             style:UIAlertActionStyleDefault
+                             handler:cancelAction];
+     
+    [alert addAction:ok];
+    [alert addAction:cancel];
+     
+    [self presentViewController:alert animated:YES completion:nil];
+}
+```
+
+### 2. Variable Readonly
+
+```objective-c
+void (^test)(void) = ^(void) {
+    NSString * world = [[NSString alloc]init];
+    world = [fString stringByAppendingFormat:@"World"];
+
+    [self alert:@"Alert" title:@"test" okMsg:@"Hello" cancelMsg:world];
+};
+
+test();
+```
+
+`block can't to modify outer variables data`
+
 
 
 &nbsp;
