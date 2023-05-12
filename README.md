@@ -1793,6 +1793,12 @@ Just realized that according to the docs, these functions only work when sending
 
 !do not use react-native.
 
+# Reset Cache
+
+```bash
+npx react-native start --reset-cache 
+```
+
 # Active Debug Menu without Device Shake <a id='2.1'></a>
 
 ```bash
