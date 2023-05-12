@@ -1860,3 +1860,31 @@ Run in Device
 ```bash
 npx react-native run-ios --simulator=\"iPhone 6s\"
 ```
+
+Run in Production
+
+```bash
+npx react-native run-ios --configuration Release --device
+
+react-native run-android --variant=release
+```
+
+Active Debug Menu without Device Shake
+
+```bash
+adb shell input keyevent KEYCODE_MENU
+```
+
+Make Bundle
+
+## IOS
+
+OLD
+```bash
+react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'
+```
+
+NEW
+```bash
+react-native bundle --entry-file ./index.js --platform ios --bundle-output ios/main.jsbundle --assets-dest ios
+```
