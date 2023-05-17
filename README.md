@@ -1899,6 +1899,16 @@ adb shell input keyevent KEYCODE_MENU
 
 Make Bundle
 
+### Cannot run program "node"
+
+```bash
+open -a /Applications/Android\ Studio.app  
+
+open -a /Applications/Android\ Studio\ Preview.app
+```
+
+or Reboot
+
 ## IOS
 
 OLD
