@@ -1114,6 +1114,30 @@ test();
 &nbsp;
 
 
+
+## Multimedia <a id='objectivec_multimedia'></a>
+
+### 1. Open Native Camera
+
+```swift
+delegate extends >> UIImagePickerControllerDelegate
+
+func openCamera() {
+   let imgPicker = UIImagePickerController()
+   imgPicker.delegate = self
+   imgPicker.sourceType = .camera
+   imgPicker.allowsEditing = false
+   imgPicker.showsCameraControls = true
+   self.present(imgPicker, animated: true, completion: nil)
+}
+```
+
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+
 # Java Bookmark <a id='androidjava'></a>
 
 ## Installed Build Tools revision 31.0.0 is corrupted"
