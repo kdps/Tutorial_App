@@ -1131,7 +1131,24 @@ func openCamera() {
    self.present(imgPicker, animated: true, completion: nil)
 }
 ```
+### 2. On Camera Capture
 
+```swift
+delegate extends >> UIImagePickerControllerDelegate & UINavigationControllerDelegate
+
+func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    var selectedImageFromPicker: UIImage?
+    if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+        selectedImageFromPicker = editedImage
+    } else if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+        selectedImageFromPicker = originalImage
+    }
+    
+    if let selectedImage = selectedImageFromPicker {
+    // Do stuff
+    }
+}
+```
 
 &nbsp;
 &nbsp;
