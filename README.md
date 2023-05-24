@@ -1157,6 +1157,16 @@ func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMe
 
 # Java Bookmark <a id='androidjava'></a>
 
+## Error type 3 Error: Activity class {MainActivity} does not exist.
+
+```xml
+<activity ...>
+    <intent-filter>
+        <data...> <- Remove It
+    </intent-filter>
+</activity>
+```
+
 ## Installed Build Tools revision 31.0.0 is corrupted"
 
 https://stackoverflow.com/questions/68387270/android-studio-error-installed-build-tools-revision-31-0-0-is-corrupted
