@@ -1805,6 +1805,14 @@ Octicons.ttf
 SimpleLineIcons.ttf
 Zocial.ttf
 ```
+### Unable to resolve module metro/src/lib/bundle-modules/HMRClient
+
+```text
+Find the file at the path: node_modules/react-native/Libraries/Utilities/HMRClient.js
+Change the line: const MetroHMRClient = require('metro/src/lib/bundle-modules/HMRClient');
+To: const MetroHMRClient = require('../../../@react-native-community/cli/node_modules/metro/src/lib/bundle-modules/HMRClient');
+```
+
 
 
 
