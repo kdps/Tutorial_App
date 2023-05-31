@@ -1157,6 +1157,26 @@ func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMe
 
 # Java Bookmark <a id='androidjava'></a>
 
+## Migrate layout to androidx
+
+```text
+<android.support.design.widget.CoordinatorLayout
+to
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+
+<android.support.v7.widget.RecyclerView
+to
+<androidx.recyclerview.widget.RecyclerView
+
+<android.support.design.widget.AppBarLayout
+to
+<com.google.android.material.appbar.AppBarLayout
+
+<android.support.v7.widget.Toolbar
+to
+<androidx.appcompat.widget.Toolbar
+```
+
 ## Error type 3 Error: Activity class {MainActivity} does not exist.
 
 ```xml
