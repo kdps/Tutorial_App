@@ -1160,6 +1160,10 @@ func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMe
 ## Migrate layout to androidx
 
 ```text
+<android.support.v7.widget.AppCompatEditText
+to
+<androidx.appcompat.widget.AppCompatTextView
+
 <android.support.design.widget.CoordinatorLayout
 to
 <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -1175,6 +1179,14 @@ to
 <android.support.v7.widget.Toolbar
 to
 <androidx.appcompat.widget.Toolbar
+
+<android.support.v7.widget.CardView
+to
+<androidx.cardview.widget.CardView
+
+<android.support.design.widget.AppBarLayout
+to
+<com.google.android.material.appbar.AppBarLayout
 ```
 
 ## Error type 3 Error: Activity class {MainActivity} does not exist.
