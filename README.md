@@ -1845,7 +1845,12 @@ Change the line: const MetroHMRClient = require('metro/src/lib/bundle-modules/HM
 To: const MetroHMRClient = require('../../../@react-native-community/cli/node_modules/metro/src/lib/bundle-modules/HMRClient');
 ```
 
+### Rsync "failed: No such file or directory (2)" Error on Archive
 
+```bash
+sudo gem install cocoapods
+pod install
+```
 
 
 
